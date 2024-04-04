@@ -38,9 +38,9 @@ void LinkedListTest1() {
 void HashTableTest1() {
     HashTable* ht = htCreate(16);
 
-    //htDoubleCapacity(ht);
+    htDoubleCapacity(ht);
     printf("Capacity: %d\nGet without entries: %d\n",
-           ht->capacity == 16,
+           ht->capacity == 32,
            htGet(ht, "xyz") == NULL
     );
 
@@ -61,22 +61,20 @@ void HashTableTest1() {
     key3[0] = '3';
     key3[1] = '\0';
 
-    printf("Keys: %p %c %p %c %p %c\n", key1, *key1, key2, *key2, key3, *key3);
-
     htSet(ht, key1, i1);
     htSet(ht, key2, i2);
     htSet(ht, key3, i3);
 
-    /*printf("Get 1: %d\nGet 2: %d\nGet 3: %d\nLength: %d\n",
+    printf("Get 1: %d\nGet 2: %d\nGet 3: %d\nLength: %d\n",
            *(int*)htGet(ht, key1) == 1,
            *(int*)htGet(ht, key2) == 2,
            *(int*)htGet(ht, key3) == 3,
            ht->length == 3
-    );*/
+    );
 
     htRemove(ht, key2);
 
-    /*printf("Len after remove: %d\nGet 2 after remove: %d\n",
+    printf("Len after remove: %d\nGet 2 after remove: %d\n",
            ht->length == 2,
            htGet(ht, key2) == NULL
     );
@@ -85,13 +83,15 @@ void HashTableTest1() {
            *(int*)htGet(ht, key1) == 1,
            *(int*)htGet(ht, key3) == 3,
            ht->length == 2
-    );*/
+    );
 
     htDelete(ht);
 }
 
 int main(int argc, char const** argv) {
-    //LinkedListTest1();
+    printf("Testing Linked List: \n");
+    LinkedListTest1();
+    printf("\nTesting HashTable: \n");
     HashTableTest1();
 
     return 0;

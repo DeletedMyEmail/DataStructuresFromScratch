@@ -52,16 +52,7 @@ void freeOverflowBuckets(LinkedList** pOverflowBuckets, size_t pCapacity) {
 
 void htFreeEntries(HashTableEntry** pEntries, size_t pCapacity) {
     for (size_t i = 0; i < pCapacity; ++i) {
-        /*printf("\n%p -", pEntries[i]);
-        if (pEntries[i] != NULL)
-            printf("%p\n", *pEntries[i]);
-        else {
-            printf("\n");
-        }*/
-
         if (pEntries[i] != NULL) {
-            printf("Freeing %p %s\n", pEntries[i]->key, pEntries[i]->key);
-
             free(pEntries[i]->key);
             free(pEntries[i]->val);
             free(pEntries[i]);
@@ -153,7 +144,6 @@ void deleteEntryInBucket(HashTable* pTable, size_t pBucketIndex, const char* pKe
             free(entry->key);
             free(entry);
             free(currentNode);
-            entry = NULL;
             --pTable->length;
 
             return;
@@ -195,10 +185,13 @@ void* htGet(HashTable* pTable, const char* pKey) {
 void htSet(HashTable* pTable, const char* pKey, void* pVal) {
     size_t index = hash_key(pKey) % pTable->capacity;
 
+
     if (pTable->entries[index] == NULL) {
-        pTable->entries[index] = malloc(sizeof(HashTableEntry));
-        pTable->entries[index]->val = pVal;
-        pTable->entries[index]->key = (char*) pKey;
+        HashTableEntry* entry = malloc(sizeof(HashTableEntry));
+        entry->val = pVal;
+        entry->key = (char*) pKey;
+
+        pTable->entries[index] = entry;
         ++pTable->length;
     }
     else if (pTable->entries[index]->key == pKey) {
@@ -221,7 +214,7 @@ void htRemove(HashTable* pTable, const char* pKey) {
         free(entry->val);
         free(entry->key);
         free(entry);
-        entry = NULL;
+        pTable->entries[index] = NULL;
         --pTable->length;
     }
     else {
